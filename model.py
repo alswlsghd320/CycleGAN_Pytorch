@@ -50,6 +50,7 @@ class Generator(nn.Module):
         # resnet-34
         # (7,64,s=2), (3,64)x6, (3,128,s=2), (3,128)x7, (3,256,s=2), (3,256)x11, (3,512,s=2),(3,512)x5
 
+        origin_in_channels = in_channels
         # initial conv block
         out_channels = 64
         model = [nn.Conv2d(in_channels, out_channels, 7, padding=3, padding_mode='reflect'),
@@ -71,18 +72,21 @@ class Generator(nn.Module):
         model += [ResidualBlock(out_channels)] * num_residual_blocks
 
         # Upsampling
+        # nn.Upsampling = simple interpolation
+        # nn.ConvTranspose2d = Deconvolution
+        # so I used nn.ConvTranspose2d layer instead of nn.Upsample layer
         for _ in range(2):
             out_channels //= 2
             model += [
-                nn.Upsample(scale_factor=2),
-                nn.Conv2d(in_channels, out_channels, 3, stride=1, padding=1),
+                nn.ConvTranspose2d(in_channels, out_channels, 3, stride=2, padding=1, output_padding=1),
                 nn.InstanceNorm2d(out_channels, affine=instance_norm_init),
                 nn.ReLU(inplace=True),
             ]
             in_channels = out_channels
 
         # Output layer
-        model += [nn.Conv2d(out_channels, in_channels, 7, padding=3, padding_mode='reflect'), nn.Tanh()]
+        model += [nn.Conv2d(out_channels, origin_in_channels, 7, padding=3, padding_mode='reflect'),
+                  nn.Tanh()]
         self.model = nn.Sequential(*model)
 
     def forward(self, x):

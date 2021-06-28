@@ -33,8 +33,8 @@ def test():
     F = Generator(in_channels=args.channels, num_residual_blocks=args.n_residual_blocks,
                   instance_norm_init=args.instance_init).to(device)
 
-    G_dict = torch.load(os.path.join(args.pretrained_path, 'G.pth'), map_location=device)
-    F_dict = torch.load(os.path.join(args.pretrained_path, 'F.pth'), map_location=device)
+    G_dict = torch.load(os.path.join(args.model_path, 'G.pth'), map_location=device)
+    F_dict = torch.load(os.path.join(args.model_path, 'F.pth'), map_location=device)
 
     G.load_state_dict(G_dict)
     F.load_state_dict(F_dict)

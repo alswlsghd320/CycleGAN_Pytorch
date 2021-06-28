@@ -1,5 +1,3 @@
-# 기환
-# 데이터셋 클래스 구현 (transform 부분은 추가 상의)
 import os
 import glob
 import requests
@@ -8,10 +6,11 @@ import zipfile
 import random
 
 from PIL import Image
+from torch.utils.data import Dataset
 import torchvision.transforms as transforms
 
 
-class ImageDataset:
+class ImageDataset(Dataset):
     def __init__(self, dataset_A: str, dataset_B: str, mode: str, transforms_=None, root_dir: str = os.getcwd()):
         """
             이미지 데이터셋을 불러옵니다.
@@ -37,8 +36,7 @@ class ImageDataset:
         self.dataset_A = dataset_A
         self.dataset_B = dataset_B
         self.mode = mode
-        self.applier = transforms.RandomApply(
-            transforms=transforms_, p=1)
+        self.applier = transforms.Compose(transforms_)
         self.root_dir = root_dir
 
         self.__download(dataset_A, os.path.join(root_dir, 'datasets'))
@@ -61,9 +59,12 @@ class ImageDataset:
         item_A = self.applier(image_A)
         item_B = self.applier(image_B)
 
-        print(item_A)
+        #print(item_A)
 
         return {"A": item_A, "B": item_B}
+
+    def __len__(self):
+        return max(len(self.files_A), len(self.files_B))
 
     def __download(self, dataset_name, dir):
         """
@@ -149,3 +150,5 @@ class ImageDataset:
         rgb_image = Image.new("RGB", image.size)
         rgb_image.paste(image)
         return rgb_image
+
+

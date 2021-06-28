@@ -1,10 +1,16 @@
-# 기환
-# LR 및 ReplayBuffer 내용 구현
-
+import os
 import random
-
+import numpy as np
 import torch
 
+def fix_seed_torch(seed: int = 42):
+    random.seed(seed)
+    np.random.seed(seed)
+    os.environ["PYTHONHASHSEED"] = str(seed)
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed(seed)  # type: ignore
+    torch.backends.cudnn.deterministic = True  # type: ignore
+    torch.backends.cudnn.benchmark = True  # type: ignore
 
 # 리플레이 버퍼 구현 부분
 # 리플레이 버퍼는 DQN에서 가져온 방식

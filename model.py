@@ -125,3 +125,7 @@ class Discriminator(nn.Module):
     def forward(self, x):
         return self.model(x)
 
+    def output_shape(self, x):
+        return self.model(x).shape
+
+

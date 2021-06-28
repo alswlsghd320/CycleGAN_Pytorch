@@ -10,7 +10,8 @@
 ```
 git clone https://github.com/alswlsghd320/CycleGAN_Pytorch.git
 cd CycleGAN_Pytorch
-pip install -r requirement.txt
+
+
 ```
 ## Train & Test
 ```

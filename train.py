@@ -119,7 +119,7 @@ def train():
     lr_scheduler_D_B = torch.optim.lr_scheduler.LambdaLR(opt_D_B,
                                                         lr_lambda=LambdaLR(args.n_epochs, args.epoch, args.decay_epoch).step)
 
-    transforms_ = [
+    train_transforms_ = [
         transforms.Resize(int(args.img_height * 1.12), Image.BICUBIC),
         transforms.RandomCrop((args.img_height, args.img_width)),
         transforms.RandomHorizontalFlip(),
@@ -127,8 +127,14 @@ def train():
         transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
     ]
 
-    train_ds = ImageDataset('female', 'male', mode='train', transforms_=transforms_)
-    val_ds = ImageDataset('female', 'male', mode='valid', transforms_=transforms_)
+    val_transforms_ = [
+        transforms.Resize((args.img_height, args.img_width), Image.BICUBIC),
+        transforms.ToTensor(),
+        transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
+    ]
+
+    train_ds = ImageDataset('female', 'male', mode='train', transforms_=train_transforms_)
+    val_ds = ImageDataset('female', 'male', mode='valid', transforms_=val_transforms_)
 
     train_dl = DataLoader(train_ds, batch_size=args.batch_size, shuffle=True, num_workers=args.num_workers)
     val_dl = DataLoader(val_ds, batch_size=5, shuffle=True, num_workers=args.num_workers)

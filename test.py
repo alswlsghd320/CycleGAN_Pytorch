@@ -39,10 +39,8 @@ def test():
     G.load_state_dict(G_dict)
     F.load_state_dict(F_dict)
 
-    transforms_ = [
-        transforms.Resize(int(args.img_height * 1.12), Image.BICUBIC),
-        transforms.RandomCrop((args.img_height, args.img_width)),
-        transforms.RandomHorizontalFlip(),
+    test_transforms_ = [
+        transforms.Resize((args.img_height, args.img_width), Image.BICUBIC),
         transforms.ToTensor(),
         transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
     ]
@@ -52,7 +50,7 @@ def test():
         filename = os.path.basename(filepath)
         img = Image.open(filepath)
         img = img.convert('RGB') if args.channels == 3 or img.mode != "RGB" else img.convert('L')
-        img = transforms_(img).to(device)
+        img = test_transforms_(img).to(device)
 
         with torch.no_grad():
             output_G = G(img)
@@ -73,14 +71,14 @@ def test():
             img_path = os.path.join(folder_path, img)
             img = Image.open(img_path)
             img = img.convert('RGB') if args.channels == 3 or img.mode != "RGB" else img.convert('L')
-            img = transforms_(img).to(device)
+            img = test_transforms_(img).to(device)
 
             with torch.no_grad():
                 output_G = G(img)
             save_image(output_G, os.path.join(save_path, img), normalize=False)
 
     elif args.dataset_path is not None:
-        test_ds = ImageDataset('female', 'male', mode='test', transforms_=transforms_)
+        test_ds = ImageDataset('female', 'male', mode='test', transforms_=test_transforms_)
         test_dl = DataLoader(test_ds, batch_size=1, shuffle=False, num_workers=4)
         f_save_path = os.path.join('dataset', 'synthetic_F')
         g_save_path = os.path.join('dataset', 'synthetic_G')

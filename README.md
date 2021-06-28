@@ -10,7 +10,7 @@
 ```
 git clone https://github.com/alswlsghd320/CycleGAN_Pytorch.git
 cd CycleGAN_Pytorch
-
+pip install -r requirements.txt
 
 ```
 ## Train & Test
@@ -45,9 +45,9 @@ python train.py --epoch 0
 "--lambda_id", type=float, default=5.0, help="identity loss weight"
 "--save_model", type=bool, default=True, help="save model"
 "--save_interval", type=int, default=10, help="interval between saving model checkpoints"
-'''
+```
 
-'''
+```
 #Test
 python test.py # You must enter one of <image, folder, dataset_path>. 
 

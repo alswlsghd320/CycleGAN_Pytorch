@@ -238,6 +238,8 @@ def train():
 
         if args.save_model and (epoc + 1) % args.save_interval == 0:
             save_path = os.path.join('save_model', t)
+            if not os.path.isdir(save_path):
+                os.mkdir(save_path)
             torch.save(G.state_dict(), f'{save_path}/G_{epoc}epochs')
             torch.save(F.state_dict(), f'{save_path}/F_{epoc}epochs')
             torch.save(D_A.state_dict(), f'{save_path}/D_A_{epoc}epochs')

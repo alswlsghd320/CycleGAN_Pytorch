@@ -2,7 +2,7 @@
 ## Contributor
 
 * JinHong Min, github: [alswlsghd320](https://github.com/alswlsghd320)
-* ChaeYoung Yoon, github: [chaeyeongyoon](https://github.com/chaeyeongyoon)
+* ChaeYeong Yoon, github: [chaeyeongyoon](https://github.com/chaeyeongyoon)
 * KiHwan Kim, github: [luceinaltis](https://github.com/luceinaltis)
 
 ## Installation
